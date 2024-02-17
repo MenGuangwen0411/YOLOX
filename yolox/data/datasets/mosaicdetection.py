@@ -87,10 +87,15 @@ class MosaicDetection(Dataset):
             xc = int(random.uniform(0.5 * input_w, 1.5 * input_w))
 
             # 3 additional image indices
-            indices = [idx] + [random.randint(0, len(self._dataset) - 1) for _ in range(3)]
+            indices = [idx.item()] + [random.randint(0, len(self._dataset) - 1) for _ in range(3)]
 
             for i_mosaic, index in enumerate(indices):
                 img, _labels, _, img_id = self._dataset.pull_item(index)
+                # for t in _labels:
+                #     cv2.rectangle(img, (int(t[0]), int(t[1])), (int(t[2]), int(t[3])), (255, 0, 255), 1, 1, 1)
+                #     # (img, pt1, pt2, color, thickness, lineType, shift )
+                # cv2.imshow('-', img)
+                # cv2.waitKey()
                 h0, w0 = img.shape[:2]  # orig hw
                 scale = min(1. * input_h / h0, 1. * input_w / w0)
                 img = cv2.resize(
